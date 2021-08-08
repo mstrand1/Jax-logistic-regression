@@ -50,8 +50,7 @@ class JaxReg:
             for m in range(0, N, size_batch):
                 i = shuffle_index[m:m + size_batch]
 
-                grads_b = loss_grad(W, X[i, :],
-                                    y[i])  # 3D jax array of size (batch_size, p+1, k): gradients for each batch element
+                grads_b = loss_grad(W, X[i, :], y[i])  # 3D jax array of size (batch_size, p+1, k): gradients for each batch element
 
                 W -= eta * jnp.mean(grads_b, axis=0)  # Update W with average over each batch
         return W
