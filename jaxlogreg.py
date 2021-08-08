@@ -1,7 +1,6 @@
 from jax import jit,grad,vmap,device_put,random
 import jax.numpy as jnp
 from functools import partial
-import time
 
 
 class JaxReg:
@@ -48,7 +47,6 @@ class JaxReg:
 
         for e in range(num_epochs):
             shuffle_index = random.permutation(random.PRNGKey(e), N)
-            start_time = time.time()
             for m in range(0, N, size_batch):
                 i = shuffle_index[m:m + size_batch]
 
@@ -56,10 +54,6 @@ class JaxReg:
                                     y[i])  # 3D jax array of size (batch_size, p+1, k): gradients for each batch element
 
                 W -= eta * jnp.mean(grads_b, axis=0)  # Update W with average over each batch
-
-            epoch_time = time.time() - start_time  # Epoch timer
-            if e % 10 == 0:
-                print("Time to complete epoch", e, ":", epoch_time)
         return W
 
     def predict(self, data):
